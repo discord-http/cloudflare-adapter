@@ -1,0 +1,38 @@
+{
+  "name": "@discord.https/cloudflare-adapter",
+  "version": "1.0.0",
+  "description": "An adapter for integrating discord.https with Cloudflare workers.",
+  "main": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/discord-http/cloudflare-adapter.git"
+  },
+  "author": "discord.https",
+  "license": "MIT",
+  "keywords": [
+    "discord-cloudflare",
+    "discord",
+    "discord.js",
+    "discord-http-interactions",
+    "discord-interactions",
+    "http-interactions",
+    "discord.https",
+    "discord-api",
+    "interaction-router"
+  ]
+}
