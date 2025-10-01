@@ -17,7 +17,7 @@ export interface HttpAdapterRequest {
 export interface HttpAdapterSererResponse {
   headersSent: boolean;
   writeHead(status: number, headers?: Record<string, string>): void;
-  end(chunk?: string): void;
+  end(chunk?: string | Uint8Array): void;
 }
 
 class WorkerServerResponse implements HttpAdapterSererResponse {
@@ -37,12 +37,13 @@ class WorkerServerResponse implements HttpAdapterSererResponse {
     if (headers) Object.assign(this.headers, headers);
   }
 
-  end(chunk?: string) {
+  end(chunk?: string | Uint8Array) {
     if (this.headersSent) {
       throw new Error("Cannot send body after headers have been sent.");
     }
-    if (chunk) this.chunks.push(new TextEncoder().encode(chunk));
+    if (chunk) this.chunks.push(typeof chunk === 'string' ? new TextEncoder().encode(chunk) : chunk);
     this.headersSent = true;
+    
     if (!this.resolved) {
       this.resolved = true;
 
@@ -53,6 +54,7 @@ class WorkerServerResponse implements HttpAdapterSererResponse {
   }
 
   toResponse(): Response {
+    // don't know, if discord will be able to parse it, if not, the reader can fix it and create a push request.
     const body = this.chunks.length ? new Blob(this.chunks) : null;
     return new Response(body, {
       status: this.statusCode,
